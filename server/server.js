@@ -76,13 +76,13 @@
 // const multer = require('multer');
 // const connect = require('./database/conn')
 // const router = require('./router/route')
-
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import connect from './database/conn.js';
 import router from './router/route.js';
 import bodyParser from 'body-parser'; 
+import router2 from './router/router2.js';
 const app = express();
 
 /** middlewares */
@@ -105,7 +105,8 @@ app.get('/', (req,res)=>{
 
 
 /** api routes */
-app.use('/api' , router)
+app.use('/api' , router )
+app.use("/api", router2);
 
 /** start server */
 

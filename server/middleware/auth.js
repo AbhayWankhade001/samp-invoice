@@ -99,13 +99,12 @@
 //         res.status(401).json({ error: "Authentication Failed!" });
 //     }
 // }
-
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../model/User.model.js";
 import config from "../router/config.js";
 
-export default async function loginUser(req, res, next) {
+export default async function loginUser(req, res) {
   const { email, password } = req.body;
   try {
     // check if user exists in database
@@ -124,6 +123,9 @@ export default async function loginUser(req, res, next) {
     const token = generateToken(user);
 
     // save token in database
+    if (!user.tokens) {
+      user.tokens = [];
+    }
     user.tokens = user.tokens.concat({ token });
     await user.save();
 
@@ -137,9 +139,9 @@ export default async function loginUser(req, res, next) {
       },
     });
   } catch (err) {
-    next(err);
+   console.log(err)
   }
-}
+};
 
 function generateToken(user) {
   const token = jwt.sign(
@@ -156,7 +158,7 @@ function generateToken(user) {
   return token;
 }
 
-export async function verifyToken(req, res, next) {
+async function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     return res.status(401).json({ error: "Authorization header missing" });
@@ -179,3 +181,6 @@ export async function verifyToken(req, res, next) {
     res.status(401).json({ error: "Authentication failed" });
   }
 }
+
+
+export {verifyToken , loginUser}
