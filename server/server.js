@@ -92,7 +92,7 @@ app.use(morgan('tiny'));
 app.disable('x-powered-by'); // less hackers know about our stack
 
 router.use(bodyParser.json());
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 /** Https get req */
 
